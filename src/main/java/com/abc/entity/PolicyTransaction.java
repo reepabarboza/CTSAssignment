@@ -1,19 +1,18 @@
 package com.abc.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 public class PolicyTransaction {
 	
 	private Long policyId;
 	private Long policyHolderId;
-	private Date dateOfService;
+	private String dateOfService;
 	private String coverageMainCategory;
 	private String coverageSubCategory;
 	private BigDecimal billedAmount;
 	private BigDecimal policyHolderAmt;
 	private BigDecimal planAmt;
-	private int deductiblePercentage;
+	private BigDecimal deductiblePercentage;
 	private String deductibleRule;
 	private BigDecimal individualAccumulatedDed;
 	private BigDecimal familyAccumulatedDed;
@@ -38,11 +37,11 @@ public class PolicyTransaction {
 		this.policyHolderId = policyHolderId;
 	}
 	
-	public Date getDateOfService() {
+	public String getDateOfService() {
 		return dateOfService;
 	}
 	
-	public void setDateOfService(Date dateOfService) {
+	public void setDateOfService(String dateOfService) {
 		this.dateOfService = dateOfService;
 	}
 	
@@ -83,11 +82,11 @@ public class PolicyTransaction {
 	}
 	
 
-	public int getDeductiblePercentage() {
+	public BigDecimal getDeductiblePercentage() {
 		return deductiblePercentage;
 	}
 
-	public void setDeductiblePercentage(int deductiblePercentage) {
+	public void setDeductiblePercentage(BigDecimal deductiblePercentage) {
 		this.deductiblePercentage = deductiblePercentage;
 	}
 

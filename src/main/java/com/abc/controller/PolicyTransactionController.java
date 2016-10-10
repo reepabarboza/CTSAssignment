@@ -1,6 +1,9 @@
 package com.abc.controller;
 
+import java.math.BigDecimal;
+
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -13,10 +16,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.abc.constant.Constants;
+import com.abc.entity.PolicyTransaction;
+import com.abc.processor.PolicyDataProcessor;
 
 @Controller
 public class PolicyTransactionController {
@@ -27,27 +33,48 @@ public class PolicyTransactionController {
     @Autowired
     Job job;
     
+    @Autowired
+    PolicyDataProcessor policyDataProcessor;
+    
 	@GetMapping("/")
-    public String listUploadedFiles(Model model) {
+    public String uploadPolicy(Model model) {
         return "policyUpload";
     }
 	
-	@PostMapping("/")
-    public String handleFileUpload(@RequestParam("inputFilePath") String inputFilePath,
+	@PostMapping("/submit")
+    public String launchPolicyUploadJob(@RequestParam("inputFilePath") String inputFilePath,
     							   @RequestParam("outputFilePath") String outputFilePath,
                                    RedirectAttributes redirectAttributes) throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-
 		
-        redirectAttributes.addFlashAttribute("message",
-        		Constants.PROCESSING_SUCCESS_MSG);
-
         JobParameters jobParameters =
       		  new JobParametersBuilder().addLong("runId", System.currentTimeMillis())
       		  .addString("inputFilePath",inputFilePath).addString("outputFilePath",outputFilePath).toJobParameters();
         
-        jobLauncher.run(job, jobParameters);
+        JobExecution jobExecution = jobLauncher.run(job, jobParameters);
+        
+        redirectAttributes.addFlashAttribute("status", jobExecution.getStatus());
+        redirectAttributes.addFlashAttribute("startTime", jobExecution.getStartTime());
+        redirectAttributes.addFlashAttribute("endTime", jobExecution.getEndTime());
+        
         return "redirect:/";
     }
 	
+	@RequestMapping("/processPolicy")
+    public @ResponseBody PolicyTransaction processPolicy(@RequestParam Long policyId, 
+    		@RequestParam Long policyHolderId, @RequestParam String dateOfService,
+    		@RequestParam String coverageMainCategory,
+    		@RequestParam String coverageSubCategory,
+    		@RequestParam BigDecimal billedAmount) throws Exception {
+		
+		PolicyTransaction policyTransaction = new PolicyTransaction();
+		policyTransaction.setPolicyId(policyId);
+		policyTransaction.setPolicyHolderId(policyHolderId);
+		policyTransaction.setDateOfService(dateOfService);
+		policyTransaction.setCoverageMainCategory(coverageMainCategory);
+		policyTransaction.setCoverageSubCategory(coverageSubCategory);
+		policyTransaction.setBilledAmount(billedAmount);
+		return policyDataProcessor.process(policyTransaction);
+    }
 	
-}
+	
+} 

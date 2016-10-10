@@ -1,5 +1,7 @@
 package com.abc.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,7 +15,8 @@ public class PlanCoverage {
 	private String mainCategory;
 	private String subCategory;
 	private String planId;
-	private int deductiblePercentage;
+	private BigDecimal deductiblePercentage;
+	private BigDecimal deductibleAmt;
 	private String deductibleRule;
 	
 	public Long getId() {
@@ -40,11 +43,18 @@ public class PlanCoverage {
 	public void setPlanId(String planId) {
 		this.planId = planId;
 	}
-	public int getDeductiblePercentage() {
+	public BigDecimal getDeductiblePercentage() {
 		return deductiblePercentage;
 	}
-	public void setDeductiblePercentage(int deductiblePercentage) {
+	public void setDeductiblePercentage(BigDecimal deductiblePercentage) {
 		this.deductiblePercentage = deductiblePercentage;
+	}
+	
+	public BigDecimal getDeductibleAmt() {
+		return deductibleAmt;
+	}
+	public void setDeductibleAmt(BigDecimal deductibleAmt) {
+		this.deductibleAmt = deductibleAmt;
 	}
 	public String getDeductibleRule() {
 		return deductibleRule;
@@ -58,7 +68,5 @@ public class PlanCoverage {
 				+ ", planId=" + planId + ", deductiblePercentage=" + deductiblePercentage + ", deductibleRule="
 				+ deductibleRule + "]";
 	}
-	
-	
 	
 }

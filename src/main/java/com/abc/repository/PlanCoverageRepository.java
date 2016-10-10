@@ -8,5 +8,5 @@ import com.abc.entity.PlanCoverage;
 @Repository
 public interface PlanCoverageRepository  extends JpaRepository<PlanCoverage, Long>{
 
-	PlanCoverage findByMainCategoryAndSubCategoryAndPlanId(String mainCategory, String subCategory, String PlanId);
+	PlanCoverage findByMainCategoryIgnoreCaseAndSubCategoryIgnoreCaseAndPlanId(String mainCategory, String subCategory, String planId);
 }

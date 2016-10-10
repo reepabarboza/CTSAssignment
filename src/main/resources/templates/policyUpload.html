@@ -1,15 +1,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-	<div th:if="${message}">
-		<h2 th:text="${message}"/>
+	<div th:if="${status}">
+		<h3 th:text="'The file processing is ' + ${status}"></h3>
+		<h3 th:text="'The process start time : '+ ${startTime}"></h3>
+		<h3 th:text="'The process end time : ' + ${endTime}"></h3>
 	</div>
 	<div>
-		<form method="POST" action="/">
+		<form method="POST" action="/ABCInsurance/submit">
 			<table>
 				<tr><td>Input File Path:</td><td><input type="text" name="inputFilePath" /></td></tr>
 				<tr><td>Output File Path:</td><td><input type="text" name="outputFilePath" /></td></tr>
-				<tr><td></td><td><input type="submit" value="OK" /></td></tr>
+				<tr><td></td><td><input type="submit" value="Submit" /></td></tr>
 			</table>
 		</form>
 	</div>

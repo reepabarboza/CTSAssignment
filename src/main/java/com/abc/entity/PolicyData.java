@@ -6,10 +6,9 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-import javax.persistence.Table;
 
-@Entity @IdClass(PolicyId.class)
-@Table(name = "PolicyData")
+@Entity
+@IdClass(PolicyId.class)
 public class PolicyData{
 	
 	@Id
@@ -100,7 +99,7 @@ public class PolicyData{
 	public String toString() {
 		return "PolicyData [policyId=" + policyId + ", policyHolderId=" + policyHolderId + ", firstName=" + firstName
 				+ ", lastName=" + lastName + ", planId=" + planId + ", coverageStartDate=" + coverageStartDate
-				+ ", coverageEndDate=" + coverageEndDate + ", fndividualAccumulatedDed=" + individualAccumulatedDed
+				+ ", coverageEndDate=" + coverageEndDate + ", individualAccumulatedDed=" + individualAccumulatedDed
 				+ ", familyAccumulatedDed=" + familyAccumulatedDed + "]";
 	}
 	
