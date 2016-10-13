@@ -1,5 +1,11 @@
 package com.abc.constant;
 
+
+
+/**
+ * Error codes and error message details
+ *
+ */
 public enum ErrorMessages {
 	E0001("Policy holder does not exists"),
 	E0002("Date of Service is after the policy Coverage End Date"),

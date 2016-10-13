@@ -7,6 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 
+
+/**
+ * Policy details of policy holders
+ *
+ */
 @Entity
 @IdClass(PolicyId.class)
 public class PolicyData{

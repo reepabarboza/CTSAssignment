@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+	<property name="USER_HOME" value="logs" />
+		
+	<!-- <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender> -->
+
+	<include resource="org/springframework/boot/logging/logback/file-appender.xml" />
+	<appender name="applicationLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>logs/applicationLog.log</File>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss}-%msg%n
+			</Pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+    		    <!-- daily rollover -->
+    			<FileNamePattern>logs/applicationLog.%d{yyyy-MM-dd}.log</FileNamePattern>
+
+    			<!-- keep 1 days' worth of history -->
+    			<maxHistory>1</maxHistory>			
+    	</rollingPolicy>
+	</appender>
+	
+	<appender name="skipRecordsLogger" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>logs/skipRecordsLog.log</File>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss}-%msg%n
+			</Pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+    		    <!-- daily rollover -->
+    			<FileNamePattern>logs/skipRecordsLog.%d{yyyy-MM-dd}.log</FileNamePattern>
+
+    			<!-- keep 1 days' worth of history -->
+    			<maxHistory>1</maxHistory>			
+    	</rollingPolicy>
+	</appender>
+
+	<root level="WARN">
+      <appender-ref ref="applicationLog" />
+      <appender-ref ref="skipRecordsLogger" />
+   </root>
+
+</configuration>

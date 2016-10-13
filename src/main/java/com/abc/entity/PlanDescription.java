@@ -6,6 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
+/**
+ * Details about the plans.
+ *
+ */
 @Entity
 @Table(name = "PlanDescription")
 public class PlanDescription {

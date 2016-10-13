@@ -6,6 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+
+/**
+ * Plan coverage details
+ *
+ */
 @Entity
 public class PlanCoverage {
 

@@ -13,6 +13,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.step.skip.SkipPolicy;
 import org.springframework.batch.item.file.FlatFileHeaderCallback;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
@@ -26,15 +27,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import com.abc.constant.Constants;
 import com.abc.entity.PolicyTransaction;
 import com.abc.processor.PolicyDataProcessor;
 
+
+/**
+ * Configuration for building batch jobs
+ *
+ */
 @Configuration
 @EnableBatchProcessing
-@Transactional
+@EnableAsync
 public class BatchConfiguration {
 
     @Autowired
@@ -43,15 +49,23 @@ public class BatchConfiguration {
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
 
-    private static final Logger log = LoggerFactory.getLogger(PolicyDataProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(Constants.APPLICATION_LOG_FILE_NAME);
     
+    /**
+     * reader bean, an instance of a FlatFileItemReader, that implements the ItemReader interface to read Policy Transactions records.
+     * @param inputFilePath
+     * @return
+     */
     @Bean
     @StepScope
     public FlatFileItemReader<PolicyTransaction> reader(@Value("#{jobParameters[inputFilePath]}") String inputFilePath) {
     	log.info("Reading file :: " + inputFilePath);
     	
         FlatFileItemReader<PolicyTransaction> reader = new FlatFileItemReader<PolicyTransaction>();
+        // Skips the header line of the input file
         reader.setLinesToSkip(1);
+        
+        //setting resource and line mapper
         reader.setResource(new FileSystemResource(inputFilePath));
         reader.setLineMapper(new DefaultLineMapper<PolicyTransaction>() {{
             setLineTokenizer(new DelimitedLineTokenizer() {{
@@ -61,20 +75,31 @@ public class BatchConfiguration {
                 setTargetType(PolicyTransaction.class);
             }});
         }});
+        
         return reader;
     }
 
+    /**
+     * the processor bean, an instance of the PolicyDataProcessor which implements ItemProcessor
+     * Contains logic to process the input policy records
+     * @return
+     */
     @Bean
     public PolicyDataProcessor processor() {
     	log.info("Processing data");
         return new PolicyDataProcessor();
     }
 
+    
+    /**
+     * the writer bean, an instance of a FlatFileItemWriter, that implements the ItemWriter interface to write the processed Policy Transaction to the CSV file.
+     * @param outputFilePath
+     * @return
+     */
     @Bean
     @StepScope
     public FlatFileItemWriter<PolicyTransaction> writer(@Value("#{jobParameters[outputFilePath]}") String outputFilePath) {
     	
-    	//outputFilePath = outputFilePath.concat("/SampleOutputTransactionFile.csv").concat(new Date().toString()).concat(".csv");
     	log.info("Writing file :: " + outputFilePath);
     	
     	FlatFileItemWriter<PolicyTransaction> writer = new FlatFileItemWriter<PolicyTransaction>();
@@ -91,6 +116,8 @@ public class BatchConfiguration {
 				"familyAccumulatedDed", "errorCode", "errorMessage", "processingMessage"});
     	delLineAgg.setFieldExtractor(fieldExtractor);
     	writer.setLineAggregator(delLineAgg);
+    	
+    	// Adds header to the file
     	writer.setHeaderCallback(new FlatFileHeaderCallback() {
 			
 			@Override
@@ -98,25 +125,52 @@ public class BatchConfiguration {
 				writer.write("Policy Id,Policy Holder Id,Date Of Service,Coverage Main Category,Coverage Sub Category,Billed Amount,Policy Holder Pays,Plan Pays,Rule used,Individual accumulated Deductible as of Service Date,Family accumulated Deductible as of Service Date,Error Code,Error Message,Processing Message");
 			}
 		});
-        return writer;
+    	
+    	return writer;
     }
-
+    
+    
+    
+    /**
+     * SkipPolicy bean specifies conditions to skip the input records
+     * @return
+     */
     @Bean
-    public Job createPolicyTransaction() {
+    public SkipPolicy fileReadSkipper() {
+    	return new FileReadSkipper();
+    }
+    
+    /**
+     *  Job bean, built using the JobBuilderFactory. 
+     *  On calling JobBuilderFactory's get method, Spring Batch will create a job builder and will initialize its job repository, 
+     *  the JobBuilder is the convenience class for building jobs
+     * @return
+     * @throws InterruptedException
+     */
+    @Bean
+    public Job createPolicyTransaction() throws InterruptedException {
         return jobBuilderFactory.get("createPolicyTransaction")
                 .incrementer(new RunIdIncrementer())
                 .flow(step())
                 .end()
                 .build();
     }
-
+    
+    /**
+     * Step bean is built using StepBuilderFactory. 
+     * It calls the reader, processor and writer.
+     * On calling the get method from the StepBuilderFactory, Spring Batch will create a step builder and will initialize its job repository and transaction manager, 
+     *  the StepBuilder is an entry point for building all kinds of steps.
+     * @return
+     */
     @Bean
-    public Step step() {
-        return stepBuilderFactory.get("step")
-                .<PolicyTransaction, PolicyTransaction> chunk(1)
-                .reader(reader(Constants.OVERRIDDEN_BY_EXPRESSION))
+    public Step step() throws IllegalArgumentException {
+		return stepBuilderFactory.get("step")
+                .<PolicyTransaction, PolicyTransaction> chunk(Constants.CHUNK_SIZE)
+                .reader(reader(Constants.OVERRIDDEN_BY_EXPRESSION)).faultTolerant().skipPolicy(fileReadSkipper())
                 .processor(processor())
                 .writer(writer(Constants.OVERRIDDEN_BY_EXPRESSION))
                 .build();
     }
+    
 }

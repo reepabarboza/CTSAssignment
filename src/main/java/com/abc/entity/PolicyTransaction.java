@@ -2,6 +2,11 @@ package com.abc.entity;
 
 import java.math.BigDecimal;
 
+
+/**
+ * Processed policy details
+ *
+ */
 public class PolicyTransaction {
 	
 	private Long policyId;

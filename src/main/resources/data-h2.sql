@@ -12,6 +12,25 @@ insert into Policy_Data(Policy_Id,Policy_Holder_Id,First_Name,Last_Name,Plan_Id,
 values('100001','1000014','Jack','Collins','P001',TIMESTAMP '2013-08-07 00:00:00',0.00,0);
 
 
+insert into Policy_Data(Policy_Id,Policy_Holder_Id,First_Name,Last_Name,Plan_Id,Coverage_Start_Date,Individual_Accumulated_Ded,Family_Accumulated_Ded) 
+values('100002','1000021','Daniel','Hayer','P002',TIMESTAMP '2012-01-01 00:00:00',4000,4000);
+
+insert into Policy_Data(Policy_Id,Policy_Holder_Id,First_Name,Last_Name,Plan_Id,Coverage_Start_Date,Individual_Accumulated_Ded,Family_Accumulated_Ded) 
+values('100003','1000031','Sally','Adams','P001',TIMESTAMP '2016-01-01 00:00:00',2500,2500);
+
+insert into Policy_Data(Policy_Id,Policy_Holder_Id,First_Name,Last_Name,Plan_Id,Coverage_Start_Date,Coverage_End_Date,Individual_Accumulated_Ded,Family_Accumulated_Ded) 
+values('100004','1000041','Jacke','Seegers','P003',TIMESTAMP '2009-01-01 00:00:00',TIMESTAMP '2016-05-31 00:00:00',5560.42,5560.42);
+
+insert into Policy_Data(Policy_Id,Policy_Holder_Id,First_Name,Last_Name,Plan_Id,Coverage_Start_Date,Individual_Accumulated_Ded,Family_Accumulated_Ded) 
+values('100005','1000051','Tom','Haskel','P001',TIMESTAMP '2011-01-01 00:00:00',6712.34,6712.34);
+
+insert into Policy_Data(Policy_Id,Policy_Holder_Id,First_Name,Last_Name,Plan_Id,Coverage_Start_Date,Individual_Accumulated_Ded,Family_Accumulated_Ded) 
+values('100006','1000061','San','Mildred','P001',TIMESTAMP '2016-05-01 00:00:00',3250.61,3250.61);
+
+insert into Policy_Data(Policy_Id,Policy_Holder_Id,First_Name,Last_Name,Plan_Id,Coverage_Start_Date,Coverage_End_Date,Individual_Accumulated_Ded,Family_Accumulated_Ded) 
+values('100007','1000071','Mack','Lee','P003',TIMESTAMP '2011-06-12 00:00:00',TIMESTAMP '2016-01-09 00:00:00',4460.82,4460.82);
+
+
 insert into Plan_Coverage(Main_Category,Sub_Category,plan_id,deductible_percentage,deductible_Amt,deductible_rule) 
 values('Preventive Care','ROUTINE PHYSICAL EXAM','P001',0,0,'No Charge');
 insert into Plan_Coverage(Main_Category,Sub_Category,plan_id,deductible_percentage,deductible_Amt,deductible_rule) 
@@ -170,9 +189,9 @@ values('Emergency And Urgent Care','EMERGENCY DEPARTMENT VISIT','P003',60,0,'60%
 insert into Plan_Coverage(Main_Category,Sub_Category,plan_id,deductible_percentage,deductible_Amt,deductible_rule) 
 values('Emergency And Urgent Care','URGENT CARE VISIT','P001',40,0,'40% AFTER DEDUCTIBLE');
 insert into Plan_Coverage(Main_Category,Sub_Category,plan_id,deductible_percentage,deductible_Amt,deductible_rule) 
-values('Emergency And Urgent Care','URGENT CARE VISIT','P002',0,100,'50% AFTER DEDUCTIBLE');
+values('Emergency And Urgent Care','URGENT CARE VISIT','P002',0,100,'$100');
 insert into Plan_Coverage(Main_Category,Sub_Category,plan_id,deductible_percentage,deductible_Amt,deductible_rule) 
-values('Emergency And Urgent Care','URGENT CARE VISIT','P003',0,120,'60% AFTER DEDUCTIBLE');
+values('Emergency And Urgent Care','URGENT CARE VISIT','P003',0,120,'$120');
 
 insert into Plan_Coverage(Main_Category,Sub_Category,plan_id,deductible_percentage,deductible_Amt,deductible_rule) 
 values('Emergency And Urgent Care','AMBULANCE SERVICES','P001',40,0,'40% AFTER DEDUCTIBLE');
@@ -208,6 +227,6 @@ values('Prescription Drugs','SPECIALTY','P001',40,0,'40% AFTER DEDUCTIBLE');
 insert into Plan_Coverage(Main_Category,Sub_Category,plan_id,deductible_percentage,deductible_Amt,deductible_rule) 
 values('Prescription Drugs','SPECIALTY','P002',50,0,'50% AFTER DEDUCTIBLE');
 insert into Plan_Coverage(Main_Category,Sub_Category,plan_id,deductible_percentage,deductible_Amt,deductible_rule) 
-values('Prescription Drugs','SPECIALTY','P003'60,80,0,'60% AFTER DEDUCTIBLE');
+values('Prescription Drugs','SPECIALTY','P003',60,0,'60% AFTER DEDUCTIBLE');
 
 

@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<div>
+		<form method="POST" action="/submit">
+			<table>
+				<tr><td>Input File Path:</td><td><input type="text" name="inputFilePath" required="required"/></td></tr>
+				<tr><td>Output File Path:</td><td><input type="text" name="outputFilePath" required="required"/></td></tr>
+				<tr><td></td><td><input type="submit" value="Submit" /></td></tr>
+			</table>
+		</form>
+	</div>
+	
+	<div>
+		<h1>Job Details</h1>
+	    <table border="1px solid black">
+	    	<tr>
+		      	<th>Job Execution ID</th>
+		      	<th>Job Instance ID</th>
+		        <th>Job Start Time</th>
+		        <th>Job End Time</th>
+		        <th>Job Status</th>
+		        <th>Exit Message</th>
+		        <th>Job Create Time</th>
+	    	</tr>
+		      	<tr th:each="job : ${jobExecutionDetails}">
+		        <td th:text="${job.jobExecutionId}"></td>
+		        <td th:text="${job.jobInstanceId}"></td>
+		        <td th:text="${job.startTime}"></td>
+		        <td th:text="${job.endTime}"></td>
+		        <td th:text="${job.status}"></td>
+		        <td th:text="${job.exitMessage}"></td>
+		        <td th:text="${job.createTime}"></td>
+	    	</tr>
+	    </table>
+	</div>
+
+</body>
+</html>
