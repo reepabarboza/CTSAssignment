@@ -1,2 +1,2 @@
 # CTSAssignment
-Read the files SamplePlanAndTransactionData and java Assignment for the project details
+Read the files SamplePlanAndTransactionData.xlsx and java_assignment.doc for the project details
